@@ -1,6 +1,6 @@
 # zToken-sdk
 
-This repository contains the API related to zToken.
+This repository contains the API related to zToken
 
 ## Functionality Requirements
 
