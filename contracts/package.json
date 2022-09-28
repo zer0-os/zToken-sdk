@@ -1,0 +1,20 @@
+{
+  "name": "zToken",
+  "version": "0.0.0",
+  "license": "MIT",
+  "scripts": {
+    "build": "npm run clean && npm run compile",
+    "clean": "hardhat clean",
+    "compile": "hardhat compile",
+    "deploy-factory": "hardhat run scripts/deploy-factory.ts --network",
+    "deploy-token": "hardhat run scripts/deploy-factory.ts --network"
+  },
+  "devDependencies": {
+    "@nomicfoundation/hardhat-toolbox": "2.0.0",
+    "@openzeppelin/contracts": "4.7.3",
+    "@openzeppelin/contracts-upgradeable": "4.8.0-rc.1",
+    "@openzeppelin/hardhat-upgrades": "1.21.0",
+    "dotenv": "16.0.2",
+    "hardhat": "2.11.2"
+  }
+}

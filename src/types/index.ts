@@ -1,3 +1,3 @@
-export * from './params';
-export * from './error';
 export * from './enums';
+export * from './error';
+export * from './params';
