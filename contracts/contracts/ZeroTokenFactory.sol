@@ -59,7 +59,7 @@ contract ZeroTokenFactory {
     ZeroToken zeroTokenProxyAs = ZeroToken(address(zeroTokenProxy));
     zeroTokenProxyAs.mint(to, amount);
 
-    _transferOwnership(proxyAdmin, zeroTokenProxyAs, zeroTokenImpl, to);
+    _transferOwnership(proxyAdmin, zeroTokenProxyAs, zeroTokenImpl, msg.sender);
 
     emit NewZeroTokenWithMint(
       address(proxyAdmin),

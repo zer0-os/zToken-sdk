@@ -39,7 +39,12 @@ async function main() {
       deployer
     )) as ZeroTokenFactory;
 
-    const tx = await zeroTokenFactory.createZeroToken(tokenName, tokenSymbol);
+    const tx = await zeroTokenFactory.createZeroTokenWithMint(
+      tokenName,
+      tokenSymbol,
+      deployer.address,
+      ethers.utils.parseEther('1000')
+    );
     const receipt = await tx.wait();
 
     const NewZeroTokenTopic = ethers.utils.id(
