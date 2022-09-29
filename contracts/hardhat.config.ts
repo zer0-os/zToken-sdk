@@ -1,16 +1,16 @@
-import * as dotenv from "dotenv";
+import '@nomicfoundation/hardhat-toolbox';
+import '@openzeppelin/hardhat-upgrades';
 
-import { HardhatUserConfig } from "hardhat/config";
-import "@nomicfoundation/hardhat-toolbox";
-import "@openzeppelin/hardhat-upgrades";
+import * as dotenv from 'dotenv';
+import { HardhatUserConfig } from 'hardhat/config';
 
-dotenv.config({path:__dirname+'/.env'});
+dotenv.config({ path: __dirname + '/.env' });
 
 const config: HardhatUserConfig = {
   solidity: {
     compilers: [
       {
-        version: "0.8.3",
+        version: '0.8.3',
         settings: {
           optimizer: {
             enabled: true,
@@ -21,21 +21,25 @@ const config: HardhatUserConfig = {
     ],
   },
   paths: {
-    sources: "./contracts",
-    tests: "./test",
+    sources: './contracts',
+    tests: './test',
   },
   typechain: {
-    outDir: "types",
-    target: "ethers-v5",
+    outDir: 'types',
+    target: 'ethers-v5',
   },
   networks: {
     goerli: {
       accounts: [`0x${process.env.TESTNET_PRIVATE_KEY}`],
-      url: "https://goerli.infura.io/v3/97e75e0bbc6a4419a5dd7fe4a518b917",
+      url: 'https://goerli.infura.io/v3/97e75e0bbc6a4419a5dd7fe4a518b917',
+    },
+    rinkeby: {
+      accounts: [`0x${process.env.TESTNET_PRIVATE_KEY}`],
+      url: 'https://eth-rinkeby.alchemyapi.io/v2/l1u0wuvuvoqtYye4fFuY9C3NGZFKWhXC',
     },
   },
   etherscan: {
-    apiKey: "FZ1ANB251FC8ISFDXFGFCUDCANSJNWPF9Q",
+    apiKey: 'FZ1ANB251FC8ISFDXFGFCUDCANSJNWPF9Q',
   },
 };
 

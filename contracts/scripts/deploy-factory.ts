@@ -11,7 +11,12 @@ async function main() {
 
   const deployer: SignerWithAddress = signers[0];
 
-  if (network.name === 'goerli' || network.name === 'mainnet') {
+  if (
+    network.name === 'goerli' ||
+    network.name === 'rinkeby' ||
+    network.name === 'mainnet' ||
+    network.name === 'localhost'
+  ) {
     // ZeroTokenFactory
     console.log('Deploying ZeroTokenFactory proxy contract...');
     const ZeroTokenFactory = await ethers.getContractFactory(
@@ -20,7 +25,7 @@ async function main() {
     const zeroTokenFactory = await ZeroTokenFactory.deploy();
     await zeroTokenFactory.deployed();
     console.log(`\ndeployed: ${zeroTokenFactory.address}`);
-    await verifyContract(zeroTokenFactory);
+    await verifyContract(zeroTokenFactory.address);
 
     console.table([
       {
