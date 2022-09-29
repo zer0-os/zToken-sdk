@@ -2,10 +2,10 @@
 
 pragma solidity ^0.8.0;
 
-import './ERC20Upgradeable.sol';
-import '../../utils/ArraysUpgradeable.sol';
-import '../../utils/CountersUpgradeable.sol';
-import '../../proxy/utils/Initializable.sol';
+import "./ERC20Upgradeable.sol";
+import "@openzeppelin/contracts-upgradeable/utils/ArraysUpgradeable.sol";
+import "@openzeppelin/contracts-upgradeable/utils/CountersUpgradeable.sol";
+import "@openzeppelin/contracts-upgradeable/proxy/utils/Initializable.sol";
 
 /**
  * @dev This contract extends an ERC20 token with a snapshot mechanism. When a snapshot is created, the balances and
@@ -101,10 +101,8 @@ abstract contract ERC20SnapshotUpgradeable is Initializable, ERC20Upgradeable {
     virtual
     returns (uint256)
   {
-    (bool snapshotted, uint256 value) = _valueAt(
-      snapshotId,
-      _accountBalanceSnapshots[account]
-    );
+    (bool snapshotted, uint256 value) =
+      _valueAt(snapshotId, _accountBalanceSnapshots[account]);
 
     return snapshotted ? value : balanceOf(account);
   }
@@ -118,10 +116,8 @@ abstract contract ERC20SnapshotUpgradeable is Initializable, ERC20Upgradeable {
     virtual
     returns (uint256)
   {
-    (bool snapshotted, uint256 value) = _valueAt(
-      snapshotId,
-      _totalSupplySnapshots
-    );
+    (bool snapshotted, uint256 value) =
+      _valueAt(snapshotId, _totalSupplySnapshots);
 
     return snapshotted ? value : totalSupply();
   }
@@ -155,11 +151,11 @@ abstract contract ERC20SnapshotUpgradeable is Initializable, ERC20Upgradeable {
     view
     returns (bool, uint256)
   {
-    require(snapshotId > 0, 'ERC20Snapshot: id is 0');
+    require(snapshotId > 0, "ERC20Snapshot: id is 0");
     // solhint-disable-next-line max-line-length
     require(
       snapshotId <= _currentSnapshotId.current(),
-      'ERC20Snapshot: nonexistent id'
+      "ERC20Snapshot: nonexistent id"
     );
 
     // When a valid snapshot is queried, there are three possibilities:
