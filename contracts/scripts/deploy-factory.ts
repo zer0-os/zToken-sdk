@@ -14,8 +14,7 @@ async function main() {
   if (
     network.name === 'goerli' ||
     network.name === 'rinkeby' ||
-    network.name === 'mainnet' ||
-    network.name === 'localhost'
+    network.name === 'mainnet'
   ) {
     // ZeroTokenFactory
     console.log('Deploying ZeroTokenFactory proxy contract...');

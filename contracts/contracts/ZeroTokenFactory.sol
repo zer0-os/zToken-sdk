@@ -1,8 +1,9 @@
 // SPDX-License-Identifier: MIT
 pragma solidity ^0.8.3;
 
-import {ProxyAdmin} from './oz/proxy/transparent/ProxyAdmin.sol';
-import {TransparentUpgradeableProxy} from './oz/proxy/transparent/TransparentUpgradeableProxy.sol';
+import {ProxyAdmin} from '@openzeppelin/contracts/proxy/transparent/ProxyAdmin.sol';
+import {TransparentUpgradeableProxy} from '@openzeppelin/contracts/proxy/transparent/TransparentUpgradeableProxy.sol';
+
 import {ZeroToken} from './ZeroToken.sol';
 
 contract ZeroTokenFactory {

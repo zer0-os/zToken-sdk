@@ -1,8 +1,9 @@
 import { Log } from '@ethersproject/abstract-provider';
 import { SignerWithAddress } from '@nomiclabs/hardhat-ethers/signers';
-import { ethers, network, upgrades } from 'hardhat';
+import { ethers, network } from 'hardhat';
 
 import {
+  ProxyAdmin__factory,
   ZeroToken__factory,
   ZeroTokenFactory,
   ZeroTokenFactory__factory,
@@ -29,8 +30,7 @@ async function main() {
   if (
     network.name === 'goerli' ||
     network.name === 'rinkeby' ||
-    network.name === 'mainnet' ||
-    network.name === 'localhost'
+    network.name === 'mainnet'
   ) {
     // ZeroTokenFactory
     const zeroTokenFactory = (await ethers.getContractAt(
@@ -59,7 +59,7 @@ async function main() {
 
         const abiInterface = ZeroTokenFactory__factory.createInterface();
         const parsed = abiInterface.parseLog(log);
-        console.log('parsed', parsed.args);
+        console.log('Found log', parsed.args);
         const proxyAdmin = parsed.args.proxyAdmin;
         const zeroTokenProxy = parsed.args.zeroTokenProxy;
 
@@ -79,19 +79,18 @@ async function main() {
     console.log('Verifying ProxyAdmin...');
     await verifyContract(addressSet.proxyAdmin);
 
-    const zeroTokenImpl = await upgrades.erc1967.getImplementationAddress(
+    const proxyAdmin = ProxyAdmin__factory.connect(
+      addressSet.proxyAdmin,
+      deployer
+    );
+    const zeroTokenImpl = await proxyAdmin.getProxyImplementation(
       addressSet.zeroTokenProxy
     );
+
     console.log('Verifying ZeroToken Implementation...');
     await verifyContract(zeroTokenImpl);
 
     const zeroTokenInterface = ZeroToken__factory.createInterface();
-
-    const proxyData = zeroTokenInterface.encodeFunctionData('initialize', [
-      tokenName,
-      tokenSymbol,
-    ]);
-    console.log('proxyData', proxyData);
 
     console.log('Verifying ZeroToken Proxy...');
     await verifyContract(addressSet.zeroTokenProxy, [
