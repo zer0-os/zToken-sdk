@@ -74,7 +74,7 @@ async function main() {
         };
       })
       .filter((value) => value !== null);
-    if (addresses.length < 1) {
+    if (receipt.logs.length < 1) {
       throw new Error("What's happening, Events didn't emit yet");
     }
 

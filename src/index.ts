@@ -1,12 +1,8 @@
-import { Log } from '@ethersproject/abstract-provider';
-import { ContractReceipt, ContractTransaction, ethers } from 'ethers';
+import { ethers } from 'ethers';
 
-import {
-  DeployedZeroToken,
-  ZeroTokenFactory__factory,
-  ZeroTokenFactoryAddresses,
-} from './config';
-import { SupportedChainId, TokenMintOptions } from './types';
+import ERC1967ProxyAbi from './config/abi/ERC1967Proxy.json';
+import ZeroTokenAbi from './config/abi/ZeroToken.json';
+import { TokenMintOptions } from './types';
 import { errorMessageForError } from './utilities';
 
 export const createZToken = async (
@@ -14,61 +10,48 @@ export const createZToken = async (
   name: string,
   symbol: string,
   options?: TokenMintOptions
-): Promise<DeployedZeroToken> => {
+): Promise<string> => {
   try {
-    const chainId = await signer.getChainId();
-    const account = await signer.getAddress();
+    // create implementation of zToken
+    const zTokenFactory = new ethers.ContractFactory(
+      ZeroTokenAbi.abi,
+      ZeroTokenAbi.bytecode,
+      signer
+    );
+    const zTokenImplementation = await zTokenFactory.deploy();
+    await zTokenImplementation.deployed();
 
-    const ZeroTokenFactory = ZeroTokenFactory__factory.connect(
-      ZeroTokenFactoryAddresses[SupportedChainId.MAINNET],
+    // create ERC1967 proxy contract
+    const zTokenInterface = new ethers.utils.Interface(ZeroTokenAbi.abi);
+    const proxyData = zTokenInterface.encodeFunctionData('initialize', [
+      name,
+      symbol,
+    ]);
+
+    const proxyFactory = new ethers.ContractFactory(
+      ERC1967ProxyAbi.abi,
+      ERC1967ProxyAbi.bytecode,
       signer
     );
 
-    let tx: ContractTransaction;
+    const proxyContract = await proxyFactory.deploy(
+      zTokenImplementation.address,
+      proxyData
+    );
+    await proxyContract.deployed();
+
     if (options) {
-      tx = await ZeroTokenFactory.createZeroTokenWithMint(
-        name,
-        symbol,
-        account,
-        options.amount
+      const contract = new ethers.Contract(
+        proxyContract.address,
+        ZeroTokenAbi.abi,
+        signer.provider
       );
-    } else {
-      tx = await ZeroTokenFactory.createZeroToken(name, symbol);
-    }
-    const receipt: ContractReceipt = await tx.wait();
 
-    const NewZeroTokenTopic = ethers.utils.id(
-      'NewZeroToken(address,address,address)'
-    );
-    const NewZeroTokenWithMintTopic = ethers.utils.id(
-      'NewZeroTokenWithMint(address,address,address,address,uint256)'
-    );
-
-    const addresses = receipt.logs
-      .map((log: Log): DeployedZeroToken | null => {
-        if (
-          log.topics[0] !== NewZeroTokenTopic &&
-          log.topics[0] != NewZeroTokenWithMintTopic
-        )
-          return null;
-
-        const abiInterface = ZeroTokenFactory__factory.createInterface();
-        const parsed = abiInterface.parseLog(log);
-        console.log('Found log', parsed.args);
-        const proxyAdmin = parsed.args.proxyAdmin;
-        const zeroTokenProxy = parsed.args.zeroTokenProxy;
-
-        return {
-          proxyAdmin,
-          zeroTokenProxy,
-        };
-      })
-      .filter((value) => value !== null);
-    if (addresses.length < 1) {
-      throw new Error("What's happening, Not found deployed addresses");
+      // mint tokens
+      await contract.connect(signer).mint(options.target, options.amount);
     }
 
-    return addresses[0]!;
+    return proxyContract.address;
   } catch (error) {
     console.error(error);
     throw new Error(errorMessageForError('failed-create-token'));
