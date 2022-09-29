@@ -3,11 +3,10 @@ pragma solidity ^0.8.3;
 
 // Slight modifiations from base Open Zeppelin Contracts
 // Consult /oz/README.md for more information
-import '@openzeppelin/contracts-upgradeable/access/OwnableUpgradeable.sol';
-
-import './oz/ERC20Upgradeable.sol';
-import './oz/ERC20SnapshotUpgradeable.sol';
-import './oz/ERC20PausableUpgradeable.sol';
+import './oz/token/ERC20/ERC20Upgradeable.sol';
+import './oz/token/ERC20/ERC20SnapshotUpgradeable.sol';
+import './oz/token/ERC20/ERC20PausableUpgradeable.sol';
+import './oz/access/OwnableUpgradeable.sol';
 
 contract ZeroToken is
   OwnableUpgradeable,

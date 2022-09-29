@@ -6,7 +6,7 @@ interface EthereumConfig {
 
 const ethereumConfig: { [key in ethereumNetwork]: EthereumConfig } = {
   goerli: {
-    ZeroTokenFactory: '0x3645851eAd920A660ec7635cb1768d9B30e5Aa1D',
+    ZeroTokenFactory: '0x5D62c81200B8106674eFfe07417af06e24B53b78',
   },
   rinkeby: {
     ZeroTokenFactory: '',
