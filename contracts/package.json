@@ -3,7 +3,7 @@
   "version": "0.0.0",
   "license": "MIT",
   "scripts": {
-    "build": "npm run clean && npm run compile",
+    "build": "yarn clean && yarn compile",
     "clean": "hardhat clean",
     "compile": "hardhat compile",
     "deploy-factory": "hardhat run scripts/deploy-factory.ts --network",
