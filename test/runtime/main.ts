@@ -18,11 +18,6 @@ const networkConfig = {
     network: SupportedChainId.RINKEBY,
     privateKey: env.get('PRIVATE_KEY').required().asString(),
   },
-  [SupportedChainId.MAINNET]: {
-    rpcUrl: env.get('MAINNET_RPC_URL').required().asString(),
-    network: SupportedChainId.MAINNET,
-    privateKey: env.get('PRIVATE_KEY').required().asString(),
-  },
 };
 
 const tokenConfig = {
