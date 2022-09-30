@@ -2,9 +2,9 @@
 
 pragma solidity ^0.8.0;
 
-import "@openzeppelin/contracts-upgradeable/token/ERC20/IERC20Upgradeable.sol";
-import "@openzeppelin/contracts-upgradeable/utils/ContextUpgradeable.sol";
-import "@openzeppelin/contracts-upgradeable/proxy/utils/Initializable.sol";
+import './IERC20Upgradeable.sol';
+import '../../utils/ContextUpgradeable.sol';
+import '../../proxy/utils/Initializable.sol';
 
 /**
  * @dev Implementation of the {IERC20} interface.
@@ -193,7 +193,7 @@ contract ERC20Upgradeable is
     uint256 currentAllowance = _allowances[sender][_msgSender()];
     require(
       currentAllowance >= amount,
-      "ERC20: transfer amount exceeds allowance"
+      'ERC20: transfer amount exceeds allowance'
     );
     _approve(sender, _msgSender(), currentAllowance - amount);
 
@@ -247,7 +247,7 @@ contract ERC20Upgradeable is
     uint256 currentAllowance = _allowances[_msgSender()][spender];
     require(
       currentAllowance >= subtractedValue,
-      "ERC20: decreased allowance below zero"
+      'ERC20: decreased allowance below zero'
     );
     _approve(_msgSender(), spender, currentAllowance - subtractedValue);
 
@@ -273,13 +273,13 @@ contract ERC20Upgradeable is
     address recipient,
     uint256 amount
   ) internal virtual {
-    require(sender != address(0), "ERC20: transfer from the zero address");
-    require(recipient != address(0), "ERC20: transfer to the zero address");
+    require(sender != address(0), 'ERC20: transfer from the zero address');
+    require(recipient != address(0), 'ERC20: transfer to the zero address');
 
     _beforeTokenTransfer(sender, recipient, amount);
 
     uint256 senderBalance = _balances[sender];
-    require(senderBalance >= amount, "ERC20: transfer amount exceeds balance");
+    require(senderBalance >= amount, 'ERC20: transfer amount exceeds balance');
     _balances[sender] = senderBalance - amount;
     _balances[recipient] += amount;
 
@@ -296,7 +296,7 @@ contract ERC20Upgradeable is
    * - `to` cannot be the zero address.
    */
   function _mint(address account, uint256 amount) internal virtual {
-    require(account != address(0), "ERC20: mint to the zero address");
+    require(account != address(0), 'ERC20: mint to the zero address');
 
     _beforeTokenTransfer(address(0), account, amount);
 
@@ -317,12 +317,12 @@ contract ERC20Upgradeable is
    * - `account` must have at least `amount` tokens.
    */
   function _burn(address account, uint256 amount) internal virtual {
-    require(account != address(0), "ERC20: burn from the zero address");
+    require(account != address(0), 'ERC20: burn from the zero address');
 
     _beforeTokenTransfer(account, address(0), amount);
 
     uint256 accountBalance = _balances[account];
-    require(accountBalance >= amount, "ERC20: burn amount exceeds balance");
+    require(accountBalance >= amount, 'ERC20: burn amount exceeds balance');
     _balances[account] = accountBalance - amount;
     _totalSupply -= amount;
 
@@ -347,8 +347,8 @@ contract ERC20Upgradeable is
     address spender,
     uint256 amount
   ) internal virtual {
-    require(owner != address(0), "ERC20: approve from the zero address");
-    require(spender != address(0), "ERC20: approve to the zero address");
+    require(owner != address(0), 'ERC20: approve from the zero address');
+    require(spender != address(0), 'ERC20: approve to the zero address');
 
     _allowances[owner][spender] = amount;
     emit Approval(owner, spender, amount);
