@@ -53,7 +53,6 @@ export const createZToken = async (
 
         const abiInterface = ZeroTokenFactory__factory.createInterface();
         const parsed = abiInterface.parseLog(log);
-        console.log('Found log', parsed.args);
         const proxyAdmin = parsed.args.proxyAdmin;
         const zeroTokenProxy = parsed.args.zeroTokenProxy;
 
